@@ -128,7 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Character.cpp" />
-    <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="Crash.cpp" />
     <ClCompile Include="Control.cpp" />
     <ClCompile Include="Dashboard.cpp" />
     <ClCompile Include="Gravity.cpp" />
