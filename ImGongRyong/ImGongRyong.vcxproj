@@ -131,6 +131,7 @@
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Control.cpp" />
     <ClCompile Include="Dashboard.cpp" />
+    <ClCompile Include="graphic_main.cpp" />
     <ClCompile Include="Gravity.cpp" />
     <ClCompile Include="Gravity.h" />
     <ClCompile Include="main.cpp" />
@@ -147,6 +148,7 @@
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Control.h" />
     <ClInclude Include="Dashboard.h" />
+    <ClInclude Include="Graphic.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Rank.h" />
     <ClInclude Include="BlankSpace.h" />
