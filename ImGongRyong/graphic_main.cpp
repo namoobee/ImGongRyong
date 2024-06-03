@@ -35,7 +35,7 @@ int main()
 			putchar('\n');
 		}*/
 
-		for (int y = 0; y < CONSOLE_Y; y++)
+		for (int y = 0; y < CONSOLE_HEIGHT; y++)
 		{
 			for (int x = 0; x < DINO_WIDTH; x++)
 				putchar(pillar[y * DINO_WIDTH + x]);

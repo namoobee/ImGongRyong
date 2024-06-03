@@ -9,7 +9,7 @@ char* make_pillar(int phase)
 	/*---------------------------------------*/
 
 	// 사이즈 20*200 출입문 없음
-	int pillar_Size = DINO_WIDTH * CONSOLE_Y;
+	int pillar_Size = DINO_WIDTH * CONSOLE_HEIGHT;
 	char* pillar = new char[pillar_Size];
 	
 	for (int i = 0; i < pillar_Size; i++)
@@ -51,7 +51,7 @@ char* make_pillar(int phase)
 	// 기존 기둥좌표는 0~199 여기서 페이즈에 맞는 높이를 빼주면 된다.
 
 	int Yscope = 200 - voidHeight - 1;
-	int Ypos = (rand()*rand()-2*rand()) % Yscope;
+	int Ypos = (rand()*rand()-5*rand()) % Yscope;
 
 
 	/*---------------------------------------*/
@@ -61,9 +61,9 @@ char* make_pillar(int phase)
 
 	for (int y = Ypos; y < Ypos + voidHeight; y++)
 	{
-		for (int x = 0; x < 20; x++)
+		for (int x = 0; x < DINO_WIDTH; x++)
 		{
-			pillar[y * 20 + x] = ' '; // 빈공간은 스페이스 바;
+			pillar[y * DINO_WIDTH + x] = ' '; // 빈공간은 스페이스 바;
 		}
 	}
 
@@ -88,52 +88,77 @@ char* make_dino(long sequence)
     // 빈칸 * 2 = 네모 하나
     if (sequence == 1)
     {
-        strncpy(write_begin, "        *           ", 20); write_begin += 20;
-        strncpy(write_begin, "     * **********   ", 20); write_begin += 20;
-        strncpy(write_begin, "    ****O*********  ", 20); write_begin += 20;
-        strncpy(write_begin, "    *********** **  ", 20); write_begin += 20;
-        strncpy(write_begin, "    ******** **     ", 20); write_begin += 20;
-        strncpy(write_begin, "    ********        ", 20); write_begin += 20;
-        strncpy(write_begin, "     ******** * *   ", 20); write_begin += 20;
-        strncpy(write_begin, "     ***   *****    ", 20); write_begin += 20;
-        strncpy(write_begin, "      ***           ", 20); write_begin += 20;
-        strncpy(write_begin, "      ******        ", 20); write_begin += 20;
-        strncpy(write_begin, "      ********      ", 20); write_begin += 20;
-        strncpy(write_begin, "      ******  ***   ", 20); write_begin += 20;
-        strncpy(write_begin, "      * ** ***      ", 20); write_begin += 20;
-        strncpy(write_begin, "*     ******  **    ", 20); write_begin += 20;
-        strncpy(write_begin, "*     *    *        ", 20); write_begin += 20;
-        strncpy(write_begin, "*  *********        ", 20); write_begin += 20;
-        strncpy(write_begin, "*  **  ** **        ", 20); write_begin += 20;
-        strncpy(write_begin, "*****  ** **        ", 20); write_begin += 20;
-        strncpy(write_begin, " **    **  ***      ", 20); write_begin += 20;
-        strncpy(write_begin, "       ****         ", 20); write_begin += 20;
+        strncpy(write_begin, "        *           ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "     * **********   ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "    ****O*********  ", DINO_WIDTH; write_begin += DINO_WIDTH;
+        strncpy(write_begin, "    *********** **  ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "    ******** **     ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "    ********    *   ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "     ******** * *   ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "     ***   *****    ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "      ***           ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "      ******        ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "      ********      ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "      ******  ***   ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "      * ** ***      ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "*     ******  **    ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "*     *    *        ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "*  *********        ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "*  **  ** **        ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "*****  ** **        ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, " **    **  ***      ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "       ****         ", DINO_WIDTH); write_begin += DINO_WIDTH;
     }
     else
     {
-        strncpy(write_begin, "        *           ", 20); write_begin += 20;
-        strncpy(write_begin, "     * **********   ", 20); write_begin += 20;
-        strncpy(write_begin, "    ****O*********  ", 20); write_begin += 20;
-        strncpy(write_begin, "    *********** **  ", 20); write_begin += 20;
-        strncpy(write_begin, "    ******** **     ", 20); write_begin += 20;
-        strncpy(write_begin, "    ********        ", 20); write_begin += 20;
-        strncpy(write_begin, "     ******** * *   ", 20); write_begin += 20;
-        strncpy(write_begin, "     ***   *****    ", 20); write_begin += 20;
-        strncpy(write_begin, "      ***           ", 20); write_begin += 20;
-        strncpy(write_begin, "      ******        ", 20); write_begin += 20;
-        strncpy(write_begin, "      **********    ", 20); write_begin += 20;
-        strncpy(write_begin, "      ******    *   ", 20); write_begin += 20;
-        strncpy(write_begin, "      * ** ****     ", 20); write_begin += 20;
-        strncpy(write_begin, "*     ******  *     ", 20); write_begin += 20;
-        strncpy(write_begin, "*     *    *        ", 20); write_begin += 20;
-        strncpy(write_begin, "*  *********        ", 20); write_begin += 20;
-        strncpy(write_begin, "*  **  ** **        ", 20); write_begin += 20;
-        strncpy(write_begin, "***** **    **      ", 20); write_begin += 20;
-        strncpy(write_begin, " **  **      ***    ", 20); write_begin += 20;
-        strncpy(write_begin, "     ****          ", 20); write_begin += 20;
+        strncpy(write_begin, "        *           ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "     * **********   ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "    ****O*********  ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "    *********** **  ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "    ******** **     ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "    ********    *   ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "     ******** * *   ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "     ***   *****    ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "      ***           ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "      ******        ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "      **********    ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "      ******    *   ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "      * ** ****     ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "*     ******  *     ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "*     *    *        ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "*  *********        ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "*  **  ** **        ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "***** **    **      ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, " **  **      ***    ", DINO_WIDTH); write_begin += DINO_WIDTH;
+        strncpy(write_begin, "     ****           ", DINO_WIDTH); write_begin += DINO_WIDTH;
     }
 
     *write_begin = '\0'; // Null 추가
 
     return dino;
+}
+
+char* make_coin()
+{
+    // 코인은 10*10 크기
+    int coinSize = COIN_WIDTH * COIN_HEIGHT;
+
+    char* coin = new char[coinSize + 1];
+
+    char* write_begin;
+
+    strncpy(write_begin, "**********", COIN_WIDTH); write_begin += COIN_WIDTH;
+    strncpy(write_begin, "*        *", COIN_WIDTH); write_begin += COIN_WIDTH;
+    strncpy(write_begin, "*   **   *", COIN_WIDTH); write_begin += COIN_WIDTH;
+    strncpy(write_begin, "*   **   *", COIN_WIDTH); write_begin += COIN_WIDTH;
+    strncpy(write_begin, "*   **   *", COIN_WIDTH); write_begin += COIN_WIDTH;
+    strncpy(write_begin, "*   **   *", COIN_WIDTH); write_begin += COIN_WIDTH;
+    strncpy(write_begin, "*   **   *", COIN_WIDTH); write_begin += COIN_WIDTH;
+    strncpy(write_begin, "*   **   *", COIN_WIDTH); write_begin += COIN_WIDTH;
+    strncpy(write_begin, "*        *", COIN_WIDTH); write_begin += COIN_WIDTH;
+    strncpy(write_begin, "**********", COIN_WIDTH); write_begin += COIN_WIDTH;
+
+    *write_begin = '\0';
+
+    return coin;
 }
