@@ -41,21 +41,21 @@ using namespace std;
 	}
 
 	// 좌표 접근자
-	int Object::getObj_x()
+	int Object::getObj_x() // x축
 	{
 		return this->objX;
 	}
-	int Object::getObj_y()
+	int Object::getObj_y() // y축
 	{
 		return this->objY;
 	}
 
 	// 크기 접근자
-	int Object::getObj_Width()
+	int Object::getObj_Width() // 너비
 	{
 		return this->objWidth;
 	}
-	int Object::getObj_Height()
+	int Object::getObj_Height() // 높이
 	{
 		return this->objHeight;
 	}

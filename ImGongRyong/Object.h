@@ -1,5 +1,5 @@
 // 파일 이름: Object.h
-// 설명: 이 파일은 Object 클래스의 선언을 포함하고 있습니다. Object 클래스는 게임에서 [	 	] 을 관리 합니다.
+// 설명: 이 파일은 Object 클래스의 선언을 포함하고 있습니다. Object 클래스는 게임에서 물체의 상태를 관리 합니다.
 // 작성자: 전인배
 // 작성 날짜: 2024-06-02
 // 수정 이력:
@@ -8,7 +8,6 @@
 #pragma once
 
 #include <string>
-using namespace std;
 
 class Object
 {
@@ -22,16 +21,16 @@ protected:
 
 public:
 	// 생성자
-	Object(int x, int y, int width, int height, string& shpae);
+	Object(int objX, int objY, int objWidth, int objHeight, std::string& objShpae);
 
 	// 좌표 설정자
-	void setPosition(int x, int y);
+	void setPosition(int objX, int objY);
 
 	// 크기 설정자
-	void setSize(int width, int height);
+	void setSize(int objWidth, int objHeight);
 
 	// 모양 설정자
-	void setShape(string& shape);
+	void setShape(std::string& objShape);
 
 	// 좌표 접근자
 	int getObj_x(); 
