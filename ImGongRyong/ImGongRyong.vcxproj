@@ -130,12 +130,14 @@
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Dashboard.cpp" />
-    <ClCompile Include="graphic_main.cpp" />
+    <ClCompile Include="Draw.cpp" />
+    <ClCompile Include="Graphic.cpp" />
     <ClCompile Include="Gravity.cpp" />
     <ClCompile Include="Gravity.h" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Rank.cpp" />
+    <ClCompile Include="Setting.cpp" />
     <ClCompile Include="Storage.cpp" />
     <ClCompile Include="Storage.h" />
     <ClCompile Include="System.cpp" />
@@ -144,9 +146,11 @@
     <ClInclude Include="Character.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Dashboard.h" />
+    <ClInclude Include="Draw.h" />
     <ClInclude Include="Graphic.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Rank.h" />
+    <ClInclude Include="Setting.h" />
     <ClInclude Include="System.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
