@@ -3,7 +3,7 @@
 // 작성자: 전인배
 // 작성 날짜: 2024-06-02
 // 수정 이력:
-//		- 2024-xx-xx: [	] (작성자:)
+//		- 2024-06-05: ['string& shape' -> 'string& objShape' 수정 ] (작성자: 전인배)
 
 #include <iostream>
 #include "Object.h"
@@ -11,7 +11,7 @@
 using namespace std;
 
 	// 매개변수가 있는 생성자
-	Object::Object(int objX, int objY, int objWidth, int objHeight, string& shape)
+	Object::Object(int objX, int objY, int objWidth, int objHeight, string& objShape)
 	{
 		this->objX = objX;
 		this->objY = objY;

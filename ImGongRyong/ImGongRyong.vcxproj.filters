@@ -27,9 +27,6 @@
     <ClCompile Include="Character.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Control.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Dashboard.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -42,22 +39,16 @@
     <ClCompile Include="Rank.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="BlankSpace.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Speed.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Storage.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="System.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Crash.cpp">
+    <ClCompile Include="graphic_main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="graphic_main.cpp">
+    <ClCompile Include="Collision.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -71,22 +62,13 @@
     <ClInclude Include="Object.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Speed.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Dashboard.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Control.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Rank.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="System.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="BlankSpace.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Graphic.h">

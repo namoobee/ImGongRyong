@@ -3,7 +3,7 @@
 // 작성자: 전인배
 // 작성 날짜: 2024-06-02
 // 수정 이력:
-//		- 2024-xx-xx: [] (작성자: )
+//		- 2024-06-05: ['string& objshpae' -> 'strint& objshape' 오타 수정] (작성자: 전인배)
 
 #pragma once
 
@@ -21,7 +21,7 @@ protected:
 
 public:
 	// 생성자
-	Object(int objX, int objY, int objWidth, int objHeight, std::string& objShpae);
+	Object(int objX, int objY, int objWidth, int objHeight, std::string& objShape);
 
 	// 좌표 설정자
 	void setPosition(int objX, int objY);
