@@ -1,158 +1,187 @@
-// 파일 이름: Gravity.cpp
+// 파일 이름: Main.cpp
 // 설명: 이 파일은 main.cpp 를 구현합니다
 // 작성자: 류성수
 // 작성 날짜: 2024-06-04
 // 수정 이력:
 //		- 2024-xx-xx: [		내용	] (작성자: )
 
-#include<stdio.h>
-#include<stdlib.h>
-#include<iostream>
-#include<string>
-#include<vector>
-
-#define PRINT_RECORD_NUM 10
+#include <iostream>
+#include <vector>
+#include <cstdlib>
+#include <ctime>
+#include <conio.h>
+#include <windows.h>
+#include <iomanip>
+#include "Object.h"
+#include "Consol.h"
+#include "Draw.h"
+#include "Collision.h"
 
 using namespace std;
 
-typedef struct
-{
-	string ID;
-	long score;
-}RECORD;
+// 게임화면 너비 높이 설정
+const int WIDTH = 110;
+const int HEIGHT = 20;
+// 비행기 x좌표 초기 위치 설정
+const int PLANE_X = 5;
+// 비행기 높이 설정
+const int PLANE_HEIGHT = 3;
+// 비행기 중력 가속도 설정
+const float GRAVITY = 0.02f;
+// 비행기 점프속도 설정
+const float JUMP_SPEED = -1.0f;
+
+// 게임화면 상단 점수 출력
+
+void drawScore(int score, int highScore, bool paused);
 
 int main()
 {
 
-	/*-------------------------------*/
-	// 1. 공룡클래스(유저)생성
-	/*-------------------------------*/
+    // 콘솔 창 크기 설정 및 커서 숨김
+    Consol::setConsoleSize(WIDTH, HEIGHT + 2);
+    // 콘솔 커서 가시성 설정(Consol.cpp) false 일땐 커서가 보이지 않음
+    Consol::setCursorVisibility(false);
 
-	// 클래스 생성자입력
-
-
-	/*-------------------------------*/
-	// 2. 난이도, 시간초, 스코어 부분 선언
-	/*-------------------------------*/
-
-	int phase = 1;
-
-	long time = 0;
-	// double 형으로 선언하면, 0~2^12 까지밖에 카운트할 수 없음 그래서, 소수점을 날려버리는 대신 정수값으로 맞춰주는것
-
-	long score = 0; // 32비트 정수값 -> 0~2^32-1 까지 계산
-	// score = 시간초에 따른 계산 + 코인값(스코어 그자체) 로 계산됨
-
-
-	/*-------------------------------*/
-	// 3. 최대 기둥갯수를 가질만큼의 벡터 선언
-	/*-------------------------------*/
-
-	
-
-
-	/*-------------------------------*/
-	// 4. 무한루프 생성 (실제 게임이 이뤄지는 부분)
-	/*-------------------------------*/
-
-	while (1)
-	{
+    // 현재시간 난수 생성 시드 전달
+    srand(static_cast<unsigned int>(time(0)));
+    // 비행기 y좌표 초기 위치를 화면 중앙으로 설정
+    int PLANE_Y = HEIGHT / 2;
+    // 비행기 초기 속도 0으로 설정
+    float velocity = 0;
+    // 초기 점수를 0으로 설정
+    int score = 0;
+    // 최고 점수 0 설정 이건 후에 수정
+    int highScore = 0;
+    // 파이프 이동 속도
+    int pipeSpeed = 2;
+    // 빈공간
+    int gapSize = PLANE_HEIGHT + 6;
+    // 파이프 생성 간격 화면 너비 1/4
+    int pipeInterval = WIDTH / 4;
 
 
 
+    // 파이프, 코인, 비행기 초기화
+    vector<Object::Pipe> pipes = { {WIDTH, HEIGHT / 2 - gapSize / 2} };
+    vector<Object::Coin> coins;
+    Object::Plane plane(PLANE_X, PLANE_Y);
+
+    // 게임 루프 제어
+    bool running = true;
+    bool paused = false;
+
+    DWORD startTime = GetTickCount();
+
+    // 게임 루프 시작
+    while (running)
+    {
+        if (_kbhit())
+        {
+            int ch = _getch();
+
+            if (ch == 'p' || ch == 'P')
+            {
+                paused = !paused;
+            }
+
+            if (!paused)
+            {
+                if (ch == 'w' || ch == 'W')
+                {
+                    plane.update(GRAVITY, JUMP_SPEED, true, false);
+                }
+
+                else if (ch == 's' || ch == 'S')
+                {
+                    plane.update(GRAVITY, JUMP_SPEED, false, true);
+                }
+            }
+
+        }
+
+        if (!paused)
+        {
+            // 중력 영향으로 비행기 위치 업데이트
+            plane.update(GRAVITY, JUMP_SPEED, false, false);
+            // 비행기와 파이프 충돌 확인, 충돌 시 게임종료
+            if (Collision::checkCollision(plane, pipes, gapSize, PLANE_HEIGHT))
+            {
+                running = false;
+            }
+
+            // 비행기와 동전 충돌 확인, 충돌 시 점수 증가
+            Collision::checkCoinCollision(plane, coins, score, PLANE_HEIGHT);
+
+            // 모든 파이프의 x 좌표를 줄여 이동 (오른쪽에서 왼쪽이동)
+            for (Object::Pipe& pipe : pipes)
+            {
+                pipe.pipeX -= pipeSpeed;
+            }
+
+            // 모든 동전의 x 좌표를 줄여 이동 (파이프와 동일)
+            for (Object::Coin& coin : coins)
+            {
+                coin.coinX -= pipeSpeed;
+            }
+
+            // 마지막 파이프가 특정 위치 도달 시 새 파이프 추가
+            if (pipes.back().pipeX < WIDTH - pipeInterval)
+            {
+                pipes.push_back({ WIDTH, rand() % (HEIGHT - gapSize) });
+            }
+
+            // 일정 확률로 동전 추가
+            if (rand() % 10 == 0)
+            {
+                coins.push_back({ WIDTH, rand() % HEIGHT });
+            }
+
+            // 화면을 벗어난 파이프 제거
+            if (pipes.front().pipeX < -3)
+            {
+                pipes.erase(pipes.begin());
+            }
+
+            DWORD currentTime = GetTickCount();
+            if (currentTime - startTime >= 100)
+            {
+                score++;
+                startTime = currentTime;
+            }
+
+            if (score > highScore)
+            {
+                highScore = score;
+            }
+        }
 
 
+        // 게임 화면 그리기
+        drawScore(score, highScore, paused);
+
+        Draw::draw(plane, pipes, coins, score, highScore, WIDTH, HEIGHT, gapSize, paused);
 
 
+        // 50ms동안 대기 게임속도 조절
+        Sleep(50);
+    }
+    // 커서를 지정 위치로 이동 (Consol.cpp 참조)
+    Consol::gotoxy(WIDTH / 2 - 5, HEIGHT / 2);
+    std::cout << "Game Over!" << std::endl;
+    Sleep(3000);
+    return 0;
+}
 
 
+void drawScore(int score, int highScore, bool paused)
+{
+    Consol::gotoxy(1, 23);
+    cout << "일시정지 : 'P'" << setw(20) << "최고점수 : " << highScore << setw(20) << "현재 점수 :" << score;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-	}
-
-
-	/*-------------------------------*/
-	// 5. 저장부분
-	/*-------------------------------*/
-
-	system("cls"); // 일단 화면 초기화
-	char answer;
-
-	while (1) // 저장할거냐?
-	{
-		printf("\n저장하시겠습니까? (Y/N) : ");
-		cin >> answer;
-
-		if (answer == 'Y' || answer == 'y' || answer == 'N' || answer == 'n') //원하는 대답이 나올때까지 무한루프
-			break;
-	}
-
-	string ID;
-
-	if (answer == 'y' || answer == 'Y') // 저장할거임
-	{
-		printf("\n아이디를 입력하시오 : ");
-		cin >> ID;
-
-
-
-		/*-- 쓰기모드로 txt 파일 오픈 --*/
-
-		// id와 스코어 작성하는 기능구현필요
-
-		printf("\n성공적으로 저장되었습니다.");
-
-		/*-- 쓰기모드의 fclose 작성 --*/
-
-
-
-
-		/*-- 읽기모드로 txt 파일 오픈 --*/
-
-		// txt 파일에 아마 아래와 같은 형식으로 저장될 것임 맨위의 구조체를 이용해, EOF까지 몇줄이 작성되었는지를 셀것 
-		// 카운트한 숫자로 동적할당
-		/*
-		* 아이디1 점수
-		* 아이디2 점수
-		*/
-
-		int Total_recordNum; // 몇개의 줄(기록)이 있는지
-
-		RECORD* userRecord = new RECORD[Total_recordNum]; // 이렇게 동적할당
-
-		
-		// 이 동적할당받은 배열을 이용해, 점수를 기준으로 내림차순으로 정렬하는 코드
-
-		
-		for (int idx = 0; idx < PRINT_RECORD_NUM; idx++)// 내림차순으로 정렬되어있기에 원하는 등수만큼 주르륵 출력
-		{
-			printf("\n%d등 : %s님,\t:%d", idx, userRecord[idx].ID.c_str(), userRecord[idx].score);
-		}
-
-		/*-- 읽기모드의 fclose 작성 --*/
-
-		delete[] userRecord; // 동적할당 받은 부분 삭제
-	}
-	
-	/*-------------------------------*/
-	// 6. 정리 부분
-	/*-------------------------------*/
-
-	// 할당해제부분
-	// ex 공룡, 기둥벡터안의 기둥 인스턴스들, 코인 등을 할당해제
-
-
-	return 0;
+    if (paused)
+    {
+        Consol::gotoxy(WIDTH / 2 - 5, HEIGHT / 2);
+        cout << "일시정지";
+    }
 }
