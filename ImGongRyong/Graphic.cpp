@@ -92,7 +92,7 @@ char* make_dino(long sequence)
     {
         strncpy(write_begin, "        *           ", DINO_WIDTH); write_begin += DINO_WIDTH;
         strncpy(write_begin, "     * **********   ", DINO_WIDTH); write_begin += DINO_WIDTH;
-        strncpy(write_begin, "    ****O*********  ", DINO_WIDTH; write_begin += DINO_WIDTH;
+        strncpy(write_begin, "    ****O*********  ", DINO_WIDTH); write_begin += DINO_WIDTH;
         strncpy(write_begin, "    *********** **  ", DINO_WIDTH); write_begin += DINO_WIDTH;
         strncpy(write_begin, "    ******** **     ", DINO_WIDTH); write_begin += DINO_WIDTH;
         strncpy(write_begin, "    ********    *   ", DINO_WIDTH); write_begin += DINO_WIDTH;
