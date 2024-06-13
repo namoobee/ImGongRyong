@@ -7,18 +7,17 @@
 //		- 2024-06-04: ['isCollisionCoin' 추가] (작성자: 전인배)
 
 #pragma once
+#ifndef COLLISION_H
+#define COLLISION_H
 
+#include <vector>
 #include "Object.h"
 
-class Collision : public Object
+class Collision
 {
 public:
-	// 공룡(obj1)과 장애물(obj2)이 충돌하는지 확인
-	bool isCollision(Object& dino, Object& Obstacle);
-
-	// 장애물은 2곳(위, 아래)에 있기 때문에 두개의 객체로 나누고, 각 객체에 대한 충돌 검사
-	bool isPassingThrough(Object& dino, Object& upperObstacle, Object& lowerObstacle);
-
-	// 공룡과 코인이 충돌하는지 확인
-	bool isCollisionCoin(Object& dino, Object& coin);
+    static bool checkCollision(const Object::Plane& plane, const std::vector<Object::Pipe>& pipes, int gapSize, int planeHeight);
+    static bool checkCoinCollision(Object::Plane& plane, std::vector<Object::Coin>& coins, int& score, int planeHeight);
 };
+
+#endif

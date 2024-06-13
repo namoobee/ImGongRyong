@@ -20,7 +20,7 @@ class Character
 protected:
 	// 캐릭터 현재좌표
 	int character_x;
-	int character_y;
+	int character_y; 
 
 	// 캐릭터 크기
 	int c_width;

@@ -9,52 +9,48 @@
 
 #include "Collision.h"
 
-bool Collision::isCollision(Object& dino, Object& Obstacle)
+// 비행기, 파이프, 빈공간 크기, 비행기 높이
+bool Collision::checkCollision(const Object::Plane& plane, const std::vector<Object::Pipe>& pipes, int gapSize, int planeHeight)
 {
-	// 공룡의 경계 계산
-	int Dino_left = dino.getObj_x(); // 공룡의 왼쪽 경계
-	int Dino_right = dino.getObj_x() + dino.getObj_Width(); // 공룡의 오른쪽 경계
-	int Dino_top = dino.getObj_y(); // 공룡의 상단 경계
-	int Dino_bottom = dino.getObj_y() + dino.getObj_Height(); // 공룡의 하단 경계
-	
-	// 장애물의 경계 계산
-	int Obstacle_left = Obstacle.getObj_x(); // 장애물의 왼쪽 경계
-	int Obstacle_right = Obstacle.getObj_x() + Obstacle.getObj_Width(); // 장애물의 오른쪽 경계
-	int Obstacle_top = Obstacle.getObj_y(); // 장애물의 상단 경계
-	int Obstacle_bottom = Obstacle.getObj_y() + Obstacle.getObj_Width(); // 장애물의 하단 경계
-
-	// 충돌 여부 확인 (부딪히면 false)
-	if (Dino_right > Obstacle_left && Dino_left < Obstacle_right && Dino_bottom > Obstacle_top && Dino_top < Obstacle_bottom)
-	{
-		return false;
-	}
-	return true;
+    for (const Object::Pipe& pipe : pipes)
+    {
+        // 비행기 X좌표가 파이프 X좌표 범위에 포함되는지 검사
+        if (plane.planeX >= pipe.pipeX && plane.planeX <= pipe.pipeX + 2)
+        {
+            // 비행기 Y좌표가 파이프 상단보다 작거나, 비행기 하단이 파이프 하단보다 큰지 검사
+            if (plane.planeY < pipe.pipeY || plane.planeY + planeHeight > pipe.pipeY + gapSize)
+            {
+                // 충돌 감지 되면 true
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
-bool Collision::isPassingThrough(Object& dino, Object& upperObstacle, Object& lowerObstacle)
+// 비행기, 동전, 점수
+bool Collision::checkCoinCollision(Object::Plane& plane, std::vector<Object::Coin>& coins, int& score, int planeHeight)
 {
-	// 공룡과 장애물들의 충돌이 일어나는지 확인 (충돌하지 않았다면 true)
-	return isCollision(dino, upperObstacle) && isCollision(dino, lowerObstacle);
+    bool collisionDetected = false;
+
+    for (auto it = coins.begin(); it != coins.end();)
+    {
+        // 동전 X좌표가 비행기 X좌표 범위 포함되는지, Y좌표도 같음
+        if (it->coinX >= plane.planeX && it->coinX <= plane.planeX + 2 &&
+            it->coinY >= plane.planeY && it->coinY < plane.planeY + planeHeight)
+        {
+            // 충돌 감지되면 동전을 벡터에서 제거
+            it = coins.erase(it);
+            // 30점 증가
+            score += 30;
+            // 충돌 TRUE 반환
+            collisionDetected = true;
+        }
+        else
+        {
+            ++it;
+        }
+    }
+    return collisionDetected;
 }
 
-bool Collision::isCollisionCoin(Object& dino, Object& coin)
-{
-	// 공룡의 경계 계산
-	int Dino_left = dino.getObj_x(); 
-	int Dino_right = dino.getObj_x() + dino.getObj_Width();
-	int Dino_top = dino.getObj_y();
-	int Dino_bottom = dino.getObj_y() + dino.getObj_Height();
-
-	// 코인의 경계 계산
-	int Coin_left = coin.getObj_x(); // 코인의 왼쪽 경계
-	int Coin_right = coin.getObj_x() + coin.getObj_Width(); // 코인의 오른쪽 경계
-	int Coin_top = coin.getObj_y(); // 코인의 상단 경계
-	int Coin_bottom = coin.getObj_y() + coin.getObj_Height(); // 코인의 하단 경계
-
-	// 충돌 여부 확인 (공룡과 코인이 충돌하면 true)
-	if (Dino_right > Coin_left && Dino_left < Coin_right && Dino_bottom > Coin_top && Dino_top < Coin_bottom)
-	{
-		return true;
-	}
-	return false;
-}

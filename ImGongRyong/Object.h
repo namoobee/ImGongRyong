@@ -6,41 +6,39 @@
 //		- 2024-06-05: ['string& objshpae' -> 'strint& objshape' 오타 수정] (작성자: 전인배)
 
 #pragma once
-
-#include <string>
+#ifndef OBJECT_H
+#define OBJECT_H
 
 class Object
 {
-protected:
-	int objX; // 물체의 x 좌표
-	int objY; // 물체의 y 좌표
-	int objWidth; // 물체의 너비
-	int objHeight; // 물체의 높이
-	std::string objShape; // 물체의 현재 모양을 나타내는 문자열 (ex: "Dino" )
-	
-
 public:
-	// 생성자
-	Object(int objX, int objY, int objWidth, int objHeight, std::string& objShape);
+    class Plane
+    {
+    public:
+        int planeX, planeY;
+        float velocity;
+        Plane(int p_startX, int p_startY) : planeX(p_startX), planeY(p_startY), velocity(0) {}
+        void update(float gravity, float jumpSpeed, bool moveUp, bool moveDown);
+    };
 
-	// 좌표 설정자
-	void setPosition(int objX, int objY);
+    class Pipe
+    {
+    public:
+        int pipeX;
+        int pipeY;
+        Pipe(int pi_startX, int pi_StartY) : pipeX(pi_startX), pipeY(pi_StartY) {}
+    };
 
-	// 크기 설정자
-	void setSize(int objWidth, int objHeight);
-
-	// 모양 설정자
-	void setShape(std::string& objShape);
-
-	// 좌표 접근자
-	int getObj_x(); 
-	int getObj_y(); 
-
-	// 크기 접근자
-	int getObj_Width(); 
-	int getObj_Height(); 
-
-	// 모양 접근자
-	std::string getObj_Shape(); 
-
+    class Coin
+    {
+    public:
+        int coinX;
+        int coinY;
+        Coin(int c_startX, int c_startY) : coinX(c_startX), coinY(c_startY) {}
+    };
 };
+
+
+
+
+#endif // !OBJECT_H
