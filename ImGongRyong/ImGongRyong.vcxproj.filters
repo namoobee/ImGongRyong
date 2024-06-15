@@ -27,13 +27,7 @@
     <ClCompile Include="Object.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Rank.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Storage.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="System.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Collision.cpp">
@@ -42,10 +36,7 @@
     <ClCompile Include="Draw.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Setting.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Consol.cpp">
+    <ClCompile Include="Console.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -59,22 +50,10 @@
     <ClInclude Include="Dashboard.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Rank.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="System.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphic.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Draw.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Setting.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Consol.h">
+    <ClInclude Include="Console.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

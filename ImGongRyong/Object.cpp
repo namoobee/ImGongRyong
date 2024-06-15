@@ -1,10 +1,3 @@
-// 파일 이름: Object.cpp
-// 설명: 이 파일은 Object 클래스의 구현을 포함하고 있습니다. (물체)
-// 작성자: 전인배
-// 작성 날짜: 2024-06-02
-// 수정 이력:
-//		- 2024-06-05: ['string& shape' -> 'string& objShape' 수정 ] (작성자: 전인배)
-
 #include "Object.h"
 
 void Object::Plane::update(float gravity, float jumpSpeed, bool moveUp, bool moveDown)

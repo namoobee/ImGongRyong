@@ -1,13 +1,6 @@
-// 파일 이름: Gravity.cpp
-// 설명: 이 파일은 Gravity 클래스의 구현을 포함하고 있습니다. (중력)
-// 작성자: 
-// 작성 날짜: 
-// 수정 이력:
-//		- 2024-xx-xx: [		내용	] (작성자: )
+#include "console.h"
 
-#include "consol.h"
-
-void Consol::setConsoleSize(int width, int height)
+void Console::setConsoleSize(int width, int height)
 {
     // 콘솔 창의 핸들을 가져옴
     HWND console = GetConsoleWindow();
@@ -19,7 +12,7 @@ void Consol::setConsoleSize(int width, int height)
     MoveWindow(console, r.left, r.top, width * 10, height * 20, TRUE);
 }
 
-void Consol::gotoxy(int x, int y)
+void Console::gotoxy(int x, int y)
 {
     // 콘솔 화면 좌표 SHORT 타입으로 구조체 저장
     COORD coord = { (SHORT)x, (SHORT)y };
@@ -27,7 +20,7 @@ void Consol::gotoxy(int x, int y)
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
-void Consol::setCursorVisibility(bool visible)
+void Console::setCursorVisibility(bool visible)
 {
     // 콘솔 표준 출력 핸들 가져옴
     HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);

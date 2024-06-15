@@ -1,10 +1,3 @@
-// 파일 이름: Main.cpp
-// 설명: 이 파일은 main.cpp 를 구현합니다
-// 작성자: 류성수
-// 작성 날짜: 2024-06-04
-// 수정 이력:
-//		- 2024-xx-xx: [		내용	] (작성자: )
-
 #include <iostream>
 #include <vector>
 #include <cstdlib>
@@ -12,176 +5,211 @@
 #include <conio.h>
 #include <windows.h>
 #include <iomanip>
-#include "Object.h"
-#include "Consol.h"
+
 #include "Draw.h"
+#include "Object.h"
+#include "Console.h"
 #include "Collision.h"
+#include "Dashboard.h"
+#include "Storage.h"
 
 using namespace std;
 
-// 게임화면 너비 높이 설정
+// 게임 화면 크기 설정
 const int WIDTH = 110;
 const int HEIGHT = 20;
-// 비행기 x좌표 초기 위치 설정
+
+// 비행기 위치 및 크기 설정
 const int PLANE_X = 5;
-// 비행기 높이 설정
 const int PLANE_HEIGHT = 3;
-// 비행기 중력 가속도 설정
-const float GRAVITY = 0.02f;
-// 비행기 점프속도 설정
+
+// 비행기 중력과 점프 속도 설정
+const float GRAVITY = 0.25;
 const float JUMP_SPEED = -1.0f;
 
-// 게임화면 상단 점수 출력
+Dashboard dashboard;
+Storage storage;
+bool running = true;
+int highScore = 0; // 최고점수를 유지시키기 위해 전역으로 설정
 
+// 점수 출력 함수
 void drawScore(int score, int highScore, bool paused);
 
-int main()
-{
+// 게임 화면 출력 함수
+void showGameScreen();
 
-    // 콘솔 창 크기 설정 및 커서 숨김
-    Consol::setConsoleSize(WIDTH, HEIGHT + 2);
-    // 콘솔 커서 가시성 설정(Consol.cpp) false 일땐 커서가 보이지 않음
-    Consol::setCursorVisibility(false);
+int main() {
+    // 콘솔 창 크기 설정
+    Console::setConsoleSize(WIDTH, HEIGHT + 2);
 
-    // 현재시간 난수 생성 시드 전달
+    // 커서 숨기기
+    Console::setCursorVisibility(false);
+
+    // 난수 생성 시드 초기화
     srand(static_cast<unsigned int>(time(0)));
-    // 비행기 y좌표 초기 위치를 화면 중앙으로 설정
-    int PLANE_Y = HEIGHT / 2;
-    // 비행기 초기 속도 0으로 설정
-    float velocity = 0;
-    // 초기 점수를 0으로 설정
-    int score = 0;
-    // 최고 점수 0 설정 이건 후에 수정
-    int highScore = 0;
-    // 파이프 이동 속도
-    int pipeSpeed = 2;
-    // 빈공간
-    int gapSize = PLANE_HEIGHT + 6;
-    // 파이프 생성 간격 화면 너비 1/4
-    int pipeInterval = WIDTH / 4;
 
+    // 메인 게임 루프
+    while (running) {
+        // 메인 메뉴 표시
+        dashboard.displayMainMenu();
+        int choice = dashboard.getUserChoice();
 
+        switch (choice) {
+        case 1:
+            // 게임 시작
+            showGameScreen();
+            break;
+        case 2:
+            // 랭킹 표시
+            storage.displayRanking();
+            dashboard.printCenteredText("아무 키나 누르면 메인 화면으로 돌아갑니다...");
+            while (!_kbhit()) {}
+            _getch();
+            break;
+        case 3:
+            // 게임 방법
+            dashboard.displayControls();
+            while (!_kbhit()) {}
+            _getch();
+            break;
+        case 4:
+            // 게임 종료
+            dashboard.printCenteredText("게임을 종료합니다.");
+            running = false;
+            break;
+        default:
+            // 잘못된 선택 처리
+            dashboard.printCenteredText("잘못된 선택입니다. 다시 선택해주세요.");
+            cout << endl << endl;
+            dashboard.printCenteredText("아무 키나 누르면 메인 화면으로 돌아갑니다...");
+            while (!_kbhit()) {}
+            _getch();
+            break;
+        }
+    }
+    return 0;
+}
 
-    // 파이프, 코인, 비행기 초기화
+// 점수 출력 함수 구현
+void drawScore(int score, int highScore, bool paused) {
+    Console::gotoxy(0, 22);
+    cout << "현재 점수: " << score << setw(20) << "최고 점수: " << highScore << setw(20) << "일시정지: 'P'";
+    if (paused) {
+        Console::gotoxy(WIDTH / 2 - 5, HEIGHT / 2);
+        cout << "일시정지";
+    }
+}
+
+// 게임 화면 출력 함수 구현
+void showGameScreen() {
+    int PLANE_Y = HEIGHT / 2;  // 비행기 초기 위치 설정
+    float velocity = 0;  // 초기 속도 설정
+    int score = 0;  // 초기 점수 설정
+    int gapSize = PLANE_HEIGHT + 6;  // 장애물 간격 설정
+    int pipeInterval = WIDTH / 4;  // 장애물 간격 설정
+    float pipeSpeed = 2.0f;  // 장애물 이동 속도 설정
+
+    // 장애물과 동전 초기화
     vector<Object::Pipe> pipes = { {WIDTH, HEIGHT / 2 - gapSize / 2} };
     vector<Object::Coin> coins;
     Object::Plane plane(PLANE_X, PLANE_Y);
 
-    // 게임 루프 제어
-    bool running = true;
     bool paused = false;
+    DWORD startTime = GetTickCount64();
 
-    DWORD startTime = GetTickCount();
-
-    // 게임 루프 시작
-    while (running)
-    {
-        if (_kbhit())
-        {
-            int ch = _getch();
-
-            if (ch == 'p' || ch == 'P')
-            {
+    // 게임 루프
+    while (true) {
+        if (_kbhit()) {
+            char ch = _getch();
+            if (ch == 'p') {
                 paused = !paused;
             }
-
-            if (!paused)
-            {
-                if (ch == 'w' || ch == 'W')
-                {
+            if (!paused) {
+                if (ch == 'w' || ch == 'W') {
                     plane.update(GRAVITY, JUMP_SPEED, true, false);
                 }
-
-                else if (ch == 's' || ch == 'S')
-                {
+                else if (ch == 's' || ch == 'S') {
                     plane.update(GRAVITY, JUMP_SPEED, false, true);
                 }
             }
-
         }
 
-        if (!paused)
-        {
-            // 중력 영향으로 비행기 위치 업데이트
+        if (!paused) {
+            // 비행기 위치 업데이트
             plane.update(GRAVITY, JUMP_SPEED, false, false);
-            // 비행기와 파이프 충돌 확인, 충돌 시 게임종료
-            if (Collision::checkCollision(plane, pipes, gapSize, PLANE_HEIGHT))
-            {
-                running = false;
+            if (Collision::checkCollision(plane, pipes, gapSize, PLANE_HEIGHT)) {
+                break;
             }
-
-            // 비행기와 동전 충돌 확인, 충돌 시 점수 증가
             Collision::checkCoinCollision(plane, coins, score, PLANE_HEIGHT);
 
-            // 모든 파이프의 x 좌표를 줄여 이동 (오른쪽에서 왼쪽이동)
-            for (Object::Pipe& pipe : pipes)
-            {
+            // 점수에 따라 장애물 속도와 간격 조정
+            if (score > 900) {
+                pipeSpeed = 1.5f;
+                gapSize = PLANE_HEIGHT + 5;
+            }
+            else if (score > 600) {
+                pipeSpeed = 1.3f;
+                gapSize = PLANE_HEIGHT + 6;
+            }
+            else if (score < 100) {
+                pipeSpeed = 1;
+                gapSize = PLANE_HEIGHT + 6;
+            }
+
+            // 모든 장애물 이동
+            for (Object::Pipe& pipe : pipes) {
                 pipe.pipeX -= pipeSpeed;
             }
 
-            // 모든 동전의 x 좌표를 줄여 이동 (파이프와 동일)
-            for (Object::Coin& coin : coins)
-            {
+            // 모든 동전 이동
+            for (Object::Coin& coin : coins) {
                 coin.coinX -= pipeSpeed;
             }
 
-            // 마지막 파이프가 특정 위치 도달 시 새 파이프 추가
-            if (pipes.back().pipeX < WIDTH - pipeInterval)
-            {
+            // 새로운 장애물 추가
+            if (pipes.back().pipeX < WIDTH - pipeInterval) {
                 pipes.push_back({ WIDTH, rand() % (HEIGHT - gapSize) });
             }
 
             // 일정 확률로 동전 추가
-            if (rand() % 10 == 0)
-            {
+            if (rand() % 10 == 0) {
                 coins.push_back({ WIDTH, rand() % HEIGHT });
             }
 
-            // 화면을 벗어난 파이프 제거
-            if (pipes.front().pipeX < -3)
-            {
+            // 화면을 벗어난 장애물 제거
+            if (pipes.front().pipeX < -3) {
                 pipes.erase(pipes.begin());
             }
 
-            DWORD currentTime = GetTickCount();
-            if (currentTime - startTime >= 100)
-            {
+            // 점수 증가
+            DWORD currentTime = GetTickCount64();
+            if (currentTime - startTime >= 100) {
                 score++;
                 startTime = currentTime;
             }
 
-            if (score > highScore)
-            {
+            // 최고 점수 갱신
+            if (score > highScore) {
                 highScore = score;
             }
         }
 
-
-        // 게임 화면 그리기
+        // 점수와 게임 상태 출력
         drawScore(score, highScore, paused);
-
         Draw::draw(plane, pipes, coins, score, highScore, WIDTH, HEIGHT, gapSize, paused);
 
-
-        // 50ms동안 대기 게임속도 조절
-        Sleep(50);
+        // 프레임 속도 조절
+         Sleep(30);
     }
-    // 커서를 지정 위치로 이동 (Consol.cpp 참조)
-    Consol::gotoxy(WIDTH / 2 - 5, HEIGHT / 2);
-    std::cout << "Game Over!" << std::endl;
-    Sleep(3000);
-    return 0;
-}
 
+    // 게임 오버 메시지 출력
+    Console::gotoxy(WIDTH / 2 - 5, HEIGHT / 2);
+    cout << "Game Over!";
+    Console::gotoxy(0, 22);
+    cout << string(80, ' ');
+    Console::gotoxy(0, 22);
+    cout << "현재 점수: " << score << endl << "최고 점수: " << highScore << endl;
 
-void drawScore(int score, int highScore, bool paused)
-{
-    Consol::gotoxy(1, 23);
-    cout << "일시정지 : 'P'" << setw(20) << "최고점수 : " << highScore << setw(20) << "현재 점수 :" << score;
-
-    if (paused)
-    {
-        Consol::gotoxy(WIDTH / 2 - 5, HEIGHT / 2);
-        cout << "일시정지";
-    }
+    // 점수 저장 여부 묻기
+    storage.askSaveScore(score);
 }

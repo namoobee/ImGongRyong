@@ -1,8 +1,26 @@
-// 파일 이름: Dashboard.h
-// 설명: - 게임의 대시보드 출력과 관련된 기능을 제공합니다.
-// 작성자: 
-// 작성 날짜:
-// 수정 이력:
-//		- 2024-xx-xx: [		내용	] (작성자: )
-
 #pragma once
+
+#include <iostream>
+#include <Windows.h>
+#include <iomanip>
+#include <vector>
+
+using namespace std;
+
+class Dashboard
+{
+public:
+	Dashboard();
+
+	// 콘솔창의 중앙을 계산(문자, 색깔)
+	void printCenteredText(const string& text, const string& textColor = "");
+
+	// 메인화면 출력
+	void displayMainMenu();
+
+	// 선택화면 출력
+	int getUserChoice();
+
+	// 게임 조작법 
+	void displayControls();
+};
