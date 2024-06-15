@@ -1,12 +1,5 @@
-// 파일 이름: Draw.cpp
-// 설명: 이 파일은 Draw 클래스의 구현을 포함하고 있습니다.
-// 작성자: 
-// 작성 날짜: 
-// 수정 이력:
-//		- 2024-xx-xx: [		내용	] (작성자: )
-
 #include "Draw.h"
-#include "Consol.h"
+#include "Console.h"
 #include <cstring>
 #include <iostream>
 #include <Windows.h>

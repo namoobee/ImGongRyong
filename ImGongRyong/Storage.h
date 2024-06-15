@@ -1,7 +1,25 @@
-// 파일 이름: Storage.h
-// 설명: - 게임 데이터의 저장과 관련된 기능을 제공합니다.
-// 작성 날짜:
-// 수정 이력:
-//		- 2024-xx-xx: [		내용	] (작성자: )
-
 #pragma once
+
+#include "Dashboard.h"
+#include <algorithm>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <utility>
+#include <conio.h>
+
+
+using namespace std;
+
+class Storage : public Dashboard
+{
+protected:
+	const string HighScoresFile = "HighScore.txt";
+public:
+	// 점수 저장 묻기
+	void askSaveScore(int score);
+	// 점수 저장 하기
+	void saveScore(int score);
+	// 랭킹 보기
+	int displayRanking();
+};
