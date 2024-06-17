@@ -30,7 +30,7 @@ const float JUMP_SPEED = -1.0f;
 Dashboard dashboard;
 Storage storage;
 bool running = true;
-int highScore = 0; // 최고점수를 유지시키기 위해 전역으로 설정
+int highScore ; // 최고점수를 유지시키기 위해 전역으로 설정
 
 // 점수 출력 함수
 void drawScore(int score, int highScore, bool paused);
@@ -103,17 +103,18 @@ void drawScore(int score, int highScore, bool paused) {
 // 게임 화면 출력 함수 구현
 void showGameScreen() {
     int PLANE_Y = HEIGHT / 2;  // 비행기 초기 위치 설정
-    float velocity = 0;  // 초기 속도 설정
-    int score = 0;  // 초기 점수 설정
+    float velocity = 0;  // 초기 속도 설정 
+    int score = 1000;  // 초기 점수 설정 
     int gapSize = PLANE_HEIGHT + 6;  // 장애물 간격 설정
     int pipeInterval = WIDTH / 4;  // 장애물 간격 설정
-    float pipeSpeed = 2.0f;  // 장애물 이동 속도 설정
+    float pipeSpeed = 2.0f;  // 장애물 이동 속도 설정 
+    int Properties = 5;     // 코인랜덤함수 나누는 분모값
+    int RestTime = 60; // sleep 함수 들어갈 ms단위
 
     // 장애물과 동전 초기화
     vector<Object::Pipe> pipes = { {WIDTH, HEIGHT / 2 - gapSize / 2} };
     vector<Object::Coin> coins;
     Object::Plane plane(PLANE_X, PLANE_Y);
-
     bool paused = false;
     DWORD startTime = GetTickCount64();
 
@@ -143,36 +144,39 @@ void showGameScreen() {
             Collision::checkCoinCollision(plane, coins, score, PLANE_HEIGHT);
 
             // 점수에 따라 장애물 속도와 간격 조정
-            if (score > 900) {
-                pipeSpeed = 1.5f;
-                gapSize = PLANE_HEIGHT + 5;
+            if (score > 1000) { // 3단계
+                pipeSpeed = 2;
+                gapSize = PLANE_HEIGHT + 4;
+                Properties = 20;
+                RestTime = 30;
             }
-            else if (score > 600) {
-                pipeSpeed = 1.3f;
-                gapSize = PLANE_HEIGHT + 6;
-            }
-            else if (score < 100) {
+            else if (score <= 1000 && score >= 500) { // 2단계
                 pipeSpeed = 1;
+                gapSize = PLANE_HEIGHT + 4;
+                Properties = 10;
+                RestTime = 30;
+            }
+            else { // 초기 1단계 
                 gapSize = PLANE_HEIGHT + 6;
             }
 
             // 모든 장애물 이동
             for (Object::Pipe& pipe : pipes) {
-                pipe.pipeX -= pipeSpeed;
-            }
+                pipe.pipeX -= (int)pipeSpeed;
+            } 
 
             // 모든 동전 이동
             for (Object::Coin& coin : coins) {
-                coin.coinX -= pipeSpeed;
+                coin.coinX -= (int)pipeSpeed;
             }
 
             // 새로운 장애물 추가
             if (pipes.back().pipeX < WIDTH - pipeInterval) {
                 pipes.push_back({ WIDTH, rand() % (HEIGHT - gapSize) });
             }
-
+             
             // 일정 확률로 동전 추가
-            if (rand() % 10 == 0) {
+            if (rand() % Properties == 0) {
                 coins.push_back({ WIDTH, rand() % HEIGHT });
             }
 
@@ -199,7 +203,7 @@ void showGameScreen() {
         Draw::draw(plane, pipes, coins, score, highScore, WIDTH, HEIGHT, gapSize, paused);
 
         // 프레임 속도 조절
-         Sleep(30);
+         Sleep(RestTime);
     }
 
     // 게임 오버 메시지 출력

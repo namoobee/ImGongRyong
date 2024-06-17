@@ -25,7 +25,7 @@ void Dashboard::printCenteredText(const string& text, const string& textColor)
     int consoleWidth = csbi.srWindow.Right - csbi.srWindow.Left + 1;
 
     // 텍스트가 중앙에 오도록 위치 계산
-    int x = (consoleWidth - text.length()) / 2;
+    int x = (consoleWidth - (int)text.length()) / 2;
 
     // 커서 위치 설정
     COORD coord = { static_cast<SHORT>(x), csbi.dwCursorPosition.Y };
